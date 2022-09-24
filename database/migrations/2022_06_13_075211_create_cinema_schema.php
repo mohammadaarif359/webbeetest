@@ -37,7 +37,44 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
-        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
+		Schema::create('locations', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+		Schema::create('cinemas', function($table) {
+            $table->increments('id');
+            $table->string('flim_name');
+            $table->timestamps();
+        });
+		Schema::create('cinema_locations', function($table) {
+            $table->integer('cinema_id');
+            $table->string('location_id');
+            $table->timestamps();
+        });
+		Schema::create('cinema_location_slots', function($table) {
+            $table->integer('cinema_location_id');
+			$table->date('slot_date');
+            $table->time('slot_time');
+			$table->integer('available_seat')->default(100);
+            $table->timestamps();
+        });
+		Schema::create('cinema_location_slots_tickets', function($table) {
+            $table->integer('cinema_location_slot_id');
+			$table->string('ticket_type');
+            $table->integer('ticket_price');
+            $table->timestamps();
+        });
+		Schema::create('cinema_bookings', function($table) {
+            $table->integer('cinema_location_slot_id');
+            $table->integer('cinema_location_slots_ticket_id)');
+			$table->integer('user_id');
+			// seat no in array format
+			$table->text('seat_no');
+			$table->integer('total_seat');
+			$table->integer('total_amount');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -47,5 +84,11 @@ class CreateCinemaSchema extends Migration
      */
     public function down()
     {
+		Schema::dropIfExists('locations');
+		Schema::dropIfExists('cinemas');
+		Schema::dropIfExists('cinema_locations');
+		Schema::dropIfExists('cinema_location_slots');
+		Schema::dropIfExists('cinema_location_slots_tickets');
+		Schema::dropIfExists('cinema_bookings');
     }
 }
